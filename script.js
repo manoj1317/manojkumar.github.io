@@ -147,9 +147,9 @@ function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// ===== CONTACT FORM =====
+// ===== CONTACT FORM (Formspree) =====
 const contactForm = document.getElementById('contactForm');
-contactForm.addEventListener('submit', e => {
+contactForm.addEventListener('submit', async e => {
   e.preventDefault();
 
   const btn = contactForm.querySelector('button[type="submit"]');
@@ -158,17 +158,33 @@ contactForm.addEventListener('submit', e => {
   btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
   btn.disabled = true;
 
-  setTimeout(() => {
-    btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-    btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-    contactForm.reset();
+  const data = new FormData(contactForm);
 
-    setTimeout(() => {
-      btn.innerHTML = originalText;
-      btn.style.background = '';
-      btn.disabled = false;
-    }, 3000);
-  }, 1500);
+  try {
+    const response = await fetch(contactForm.action, {
+      method: 'POST',
+      body: data,
+      headers: { 'Accept': 'application/json' }
+    });
+
+    if (response.ok) {
+      btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
+      btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      contactForm.reset();
+    } else {
+      btn.innerHTML = '<i class="fas fa-times"></i> Failed. Try emailing directly.';
+      btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+    }
+  } catch {
+    btn.innerHTML = '<i class="fas fa-times"></i> Failed. Try emailing directly.';
+    btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
+  }
+
+  setTimeout(() => {
+    btn.innerHTML = originalText;
+    btn.style.background = '';
+    btn.disabled = false;
+  }, 4000);
 });
 
 // ===== SMOOTH SCROLL FOR ALL ANCHOR LINKS =====
