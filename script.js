@@ -147,44 +147,35 @@ function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// ===== CONTACT FORM (Formspree) =====
+// ===== CONTACT FORM (mailto — no backend needed) =====
 const contactForm = document.getElementById('contactForm');
-contactForm.addEventListener('submit', async e => {
+contactForm.addEventListener('submit', e => {
   e.preventDefault();
+
+  const name    = document.getElementById('name').value.trim();
+  const email   = document.getElementById('email').value.trim();
+  const subject = document.getElementById('subject').value.trim() || 'Portfolio Contact';
+  const message = document.getElementById('message').value.trim();
+
+  const body = `Hi Manojkumar,\n\nYou have a new message from your portfolio:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n\n---\nSent via portfolio contact form`;
+
+  const mailtoLink = `mailto:manojmk1317@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
   const btn = contactForm.querySelector('button[type="submit"]');
   const originalText = btn.innerHTML;
 
-  btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+  btn.innerHTML = '<i class="fas fa-check"></i> Opening Email Client...';
+  btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
   btn.disabled = true;
 
-  const data = new FormData(contactForm);
-
-  try {
-    const response = await fetch(contactForm.action, {
-      method: 'POST',
-      body: data,
-      headers: { 'Accept': 'application/json' }
-    });
-
-    if (response.ok) {
-      btn.innerHTML = '<i class="fas fa-check"></i> Message Sent!';
-      btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-      contactForm.reset();
-    } else {
-      btn.innerHTML = '<i class="fas fa-times"></i> Failed. Try emailing directly.';
-      btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-    }
-  } catch {
-    btn.innerHTML = '<i class="fas fa-times"></i> Failed. Try emailing directly.';
-    btn.style.background = 'linear-gradient(135deg, #ef4444, #dc2626)';
-  }
+  window.location.href = mailtoLink;
 
   setTimeout(() => {
+    contactForm.reset();
     btn.innerHTML = originalText;
     btn.style.background = '';
     btn.disabled = false;
-  }, 4000);
+  }, 3000);
 });
 
 // ===== SMOOTH SCROLL FOR ALL ANCHOR LINKS =====
