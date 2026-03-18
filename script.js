@@ -166,7 +166,7 @@ function rand(min, max) {
 }
 
 // ===== CONTACT FORM (EmailJS) =====
-emailjs.init('YOBG6p9B4rV9DPeEi');
+emailjs.init({ publicKey: 'YOBG6p9B4rV9DPeEi' });
 
 const contactForm = document.getElementById('contactForm');
 const submitBtn   = document.getElementById('submitBtn');
