@@ -5,14 +5,9 @@ const themeIcon   = document.getElementById('themeIcon');
 function applyTheme(theme) {
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('theme', theme);
-  if (theme === 'light') {
-    themeIcon.classList.replace('fa-sun', 'fa-moon');
-  } else {
-    themeIcon.classList.replace('fa-moon', 'fa-sun');
-  }
+  themeIcon.className = theme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
 }
 
-// Apply saved theme immediately to avoid flash
 const savedTheme = localStorage.getItem('theme') || 'dark';
 applyTheme(savedTheme);
 
