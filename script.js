@@ -180,10 +180,20 @@ contactForm.addEventListener('submit', async e => {
   formError.style.display   = 'none';
 
   try {
+    const data = {
+      name:    document.getElementById('name').value.trim(),
+      email:   document.getElementById('email').value.trim(),
+      subject: document.getElementById('subject').value.trim() || 'Portfolio Contact',
+      message: document.getElementById('message').value.trim()
+    };
+
     const response = await fetch('https://formspree.io/f/xyknlnzj', {
       method: 'POST',
-      headers: { 'Accept': 'application/json' },
-      body: new FormData(contactForm)
+      headers: {
+        'Accept': 'application/json',
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(data)
     });
 
     if (response.ok) {
