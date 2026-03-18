@@ -165,19 +165,48 @@ function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// ===== CONTACT FORM (Formspree HTML submit) =====
+// ===== CONTACT FORM (EmailJS) =====
+emailjs.init('YOBG6p9B4rV9DPeEi');
+
+const contactForm = document.getElementById('contactForm');
+const submitBtn   = document.getElementById('submitBtn');
 const formSuccess = document.getElementById('formSuccess');
 const formError   = document.getElementById('formError');
 
-// Show success banner if redirected back after Formspree submission
-if (window.location.search.includes('sent=true')) {
-  if (formSuccess) {
-    formSuccess.style.display = 'flex';
-    setTimeout(() => { formSuccess.style.display = 'none'; }, 6000);
-  }
-  // Clean the URL without reloading
-  window.history.replaceState({}, document.title, window.location.pathname + '#contact');
-}
+contactForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+  formSuccess.style.display = 'none';
+  formError.style.display   = 'none';
+
+  const templateParams = {
+    name:    document.getElementById('name').value.trim(),
+    email:   document.getElementById('email').value.trim(),
+    subject: document.getElementById('subject').value.trim() || 'Portfolio Contact',
+    message: document.getElementById('message').value.trim()
+  };
+
+  emailjs.send('service_n7nidlw', 'template_jljen8f', templateParams)
+    .then(function() {
+      contactForm.reset();
+      formSuccess.style.display = 'flex';
+      submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+      submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      setTimeout(function() {
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        submitBtn.style.background = '';
+        submitBtn.disabled = false;
+        formSuccess.style.display = 'none';
+      }, 5000);
+    }, function() {
+      formError.style.display = 'flex';
+      submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+      submitBtn.style.background = '';
+      submitBtn.disabled = false;
+    });
+});
 
 // ===== SMOOTH SCROLL FOR ALL ANCHOR LINKS =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
