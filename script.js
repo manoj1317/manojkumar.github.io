@@ -165,57 +165,19 @@ function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// ===== CONTACT FORM (Formspree) =====
-const contactForm = document.getElementById('contactForm');
-const submitBtn   = document.getElementById('submitBtn');
+// ===== CONTACT FORM (Formspree HTML submit) =====
 const formSuccess = document.getElementById('formSuccess');
 const formError   = document.getElementById('formError');
 
-contactForm.addEventListener('submit', async e => {
-  e.preventDefault();
-
-  submitBtn.disabled = true;
-  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
-  formSuccess.style.display = 'none';
-  formError.style.display   = 'none';
-
-  try {
-    const data = {
-      name:    document.getElementById('name').value.trim(),
-      email:   document.getElementById('email').value.trim(),
-      subject: document.getElementById('subject').value.trim() || 'Portfolio Contact',
-      message: document.getElementById('message').value.trim()
-    };
-
-    const response = await fetch('https://formspree.io/f/xyknlnzj', {
-      method: 'POST',
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data)
-    });
-
-    if (response.ok) {
-      contactForm.reset();
-      formSuccess.style.display = 'flex';
-      submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
-      submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-      setTimeout(() => {
-        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-        submitBtn.style.background = '';
-        submitBtn.disabled = false;
-        formSuccess.style.display = 'none';
-      }, 5000);
-    } else {
-      throw new Error('Form submission failed');
-    }
-  } catch {
-    formError.style.display = 'flex';
-    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
-    submitBtn.disabled = false;
+// Show success banner if redirected back after Formspree submission
+if (window.location.search.includes('sent=true')) {
+  if (formSuccess) {
+    formSuccess.style.display = 'flex';
+    setTimeout(() => { formSuccess.style.display = 'none'; }, 6000);
   }
-});
+  // Clean the URL without reloading
+  window.history.replaceState({}, document.title, window.location.pathname + '#contact');
+}
 
 // ===== SMOOTH SCROLL FOR ALL ANCHOR LINKS =====
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
