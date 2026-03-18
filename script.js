@@ -165,35 +165,46 @@ function rand(min, max) {
   return Math.floor(Math.random() * (max - min + 1)) + min;
 }
 
-// ===== CONTACT FORM (mailto — no backend needed) =====
+// ===== CONTACT FORM (Formspree) =====
 const contactForm = document.getElementById('contactForm');
-contactForm.addEventListener('submit', e => {
+const submitBtn   = document.getElementById('submitBtn');
+const formSuccess = document.getElementById('formSuccess');
+const formError   = document.getElementById('formError');
+
+contactForm.addEventListener('submit', async e => {
   e.preventDefault();
 
-  const name    = document.getElementById('name').value.trim();
-  const email   = document.getElementById('email').value.trim();
-  const subject = document.getElementById('subject').value.trim() || 'Portfolio Contact';
-  const message = document.getElementById('message').value.trim();
+  submitBtn.disabled = true;
+  submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+  formSuccess.style.display = 'none';
+  formError.style.display   = 'none';
 
-  const body = `Hi Manojkumar,\n\nYou have a new message from your portfolio:\n\nName: ${name}\nEmail: ${email}\n\nMessage:\n${message}\n\n---\nSent via portfolio contact form`;
+  try {
+    const response = await fetch('https://formspree.io/f/xyknlnzj', {
+      method: 'POST',
+      headers: { 'Accept': 'application/json' },
+      body: new FormData(contactForm)
+    });
 
-  const mailtoLink = `mailto:manojmk1317@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-  const btn = contactForm.querySelector('button[type="submit"]');
-  const originalText = btn.innerHTML;
-
-  btn.innerHTML = '<i class="fas fa-check"></i> Opening Email Client...';
-  btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
-  btn.disabled = true;
-
-  window.location.href = mailtoLink;
-
-  setTimeout(() => {
-    contactForm.reset();
-    btn.innerHTML = originalText;
-    btn.style.background = '';
-    btn.disabled = false;
-  }, 3000);
+    if (response.ok) {
+      contactForm.reset();
+      formSuccess.style.display = 'flex';
+      submitBtn.innerHTML = '<i class="fas fa-check"></i> Sent!';
+      submitBtn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+      setTimeout(() => {
+        submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+        submitBtn.style.background = '';
+        submitBtn.disabled = false;
+        formSuccess.style.display = 'none';
+      }, 5000);
+    } else {
+      throw new Error('Form submission failed');
+    }
+  } catch {
+    formError.style.display = 'flex';
+    submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
+    submitBtn.disabled = false;
+  }
 });
 
 // ===== SMOOTH SCROLL FOR ALL ANCHOR LINKS =====
