@@ -49,6 +49,27 @@
   --navbar-scrolled-bg: rgba(240, 244, 248, 0.95);
 }
 
+/* Explicit light mode overrides — force repaint on key elements */
+html[data-theme="light"] body { background-color: #f0f4f8; color: #0f172a; }
+html[data-theme="light"] .about,
+html[data-theme="light"] .projects,
+html[data-theme="light"] .footer { background-color: #e2e8f0; }
+html[data-theme="light"] .skill-category,
+html[data-theme="light"] .project-card,
+html[data-theme="light"] .contact-form,
+html[data-theme="light"] .timeline-content { background-color: #ffffff; border-color: rgba(0,0,0,0.09); }
+html[data-theme="light"] #navbar.scrolled { background: rgba(240, 244, 248, 0.95); }
+html[data-theme="light"] .hero { background-color: #f0f4f8; }
+html[data-theme="light"] .hero-description,
+html[data-theme="light"] .about-content p,
+html[data-theme="light"] .project-description,
+html[data-theme="light"] .timeline-points li { color: #334155; }
+html[data-theme="light"] .nav-links a { color: #334155; }
+html[data-theme="light"] .nav-links a:hover { color: #0099cc; }
+html[data-theme="light"] .contact-intro { color: #334155; }
+html[data-theme="light"] .footer-text,
+html[data-theme="light"] .footer-copy { color: #64748b; }
+
 html {
   scroll-behavior: smooth;
 }
@@ -59,6 +80,7 @@ body {
   color: var(--text-primary);
   line-height: 1.7;
   overflow-x: hidden;
+  transition: background-color 0.4s ease, color 0.4s ease;
 }
 
 a {
