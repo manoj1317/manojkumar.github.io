@@ -200,8 +200,16 @@ contactForm.addEventListener('submit', function(e) {
         submitBtn.disabled = false;
         formSuccess.style.display = 'none';
       }, 5000);
-    }, function() {
-      formError.style.display = 'flex';
+    }, function(error) {
+      console.warn('EmailJS failed, falling back to mailto:', error);
+      // Fallback: open mailto so message is never lost
+      var body = 'Name: ' + templateParams.name +
+                 '\nEmail: ' + templateParams.email +
+                 '\n\nMessage:\n' + templateParams.message;
+      var mailto = 'mailto:manojmk1317@gmail.com' +
+                   '?subject=' + encodeURIComponent(templateParams.subject) +
+                   '&body=' + encodeURIComponent(body);
+      window.open(mailto, '_blank');
       submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Send Message';
       submitBtn.style.background = '';
       submitBtn.disabled = false;
