@@ -466,6 +466,8 @@ a {
   background: var(--gradient);
   padding: 3px;
   box-shadow: var(--shadow-glow);
+  overflow: hidden;
+  flex-shrink: 0;
 }
 
 .avatar-placeholder {
