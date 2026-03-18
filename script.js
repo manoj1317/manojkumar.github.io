@@ -82,7 +82,7 @@ type();
 
 // ===== SCROLL FADE-IN ANIMATIONS =====
 const fadeElements = document.querySelectorAll(
-  '.skill-category, .project-card, .about-grid, .contact-grid, .section-header'
+  '.skill-category, .project-card, .about-grid, .contact-grid, .section-header, .timeline-item'
 );
 
 fadeElements.forEach(el => el.classList.add('fade-in'));
