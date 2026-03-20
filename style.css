@@ -229,6 +229,40 @@ a {
   overflow: hidden;
 }
 
+.animated-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    -45deg,
+    #0a0e1a,
+    #0d1f3c,
+    #0a0e1a,
+    #130d2e,
+    #0a1628
+  );
+  background-size: 400% 400%;
+  animation: gradientShift 12s ease infinite;
+  opacity: 0.9;
+}
+
+@keyframes gradientShift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+[data-theme="light"] .animated-gradient {
+  background: linear-gradient(
+    -45deg,
+    #e8f0fe,
+    #f0f4ff,
+    #e8f4fd,
+    #f0eeff,
+    #e8f7fd
+  );
+  background-size: 400% 400%;
+}
+
 .grid-overlay {
   position: absolute;
   inset: 0;
@@ -356,6 +390,65 @@ a {
   width: 1px;
   height: 40px;
   background: var(--border);
+}
+
+/* ===== TRUSTED BY ===== */
+.trusted-by {
+  margin-top: 48px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  animation: fadeInUp 0.6s ease 0.6s both;
+}
+
+.trusted-label {
+  font-size: 0.75rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-weight: 500;
+}
+
+.trusted-logos {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.trusted-logo {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-secondary);
+  padding: 7px 16px;
+  border-radius: 50px;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  transition: all var(--transition);
+  backdrop-filter: blur(6px);
+}
+
+.trusted-logo i {
+  color: var(--accent-primary);
+  font-size: 0.8rem;
+}
+
+.trusted-logo:hover {
+  background: rgba(0, 212, 255, 0.08);
+  border-color: rgba(0, 212, 255, 0.3);
+  color: var(--text-primary);
+  transform: translateY(-2px);
+}
+
+[data-theme="light"] .trusted-logo {
+  background: rgba(0, 0, 0, 0.04);
+  border-color: rgba(0, 0, 0, 0.1);
 }
 
 .scroll-indicator {
